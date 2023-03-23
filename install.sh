@@ -6,5 +6,5 @@ if [ "$OS" = "win" ]; then
     DATA='assets;assets'
 fi
 
-pyinstaller --onefile --windowed --name 'QuantumPathways-v$VERSION-$OS' --add-data $DATA main.py
+pyinstaller --onefile --windowed --name "QuantumPathways-v$VERSION-$OS" --add-data $DATA main.py
 chmod +x "dist/QuantumPathways-v$VERSION-$OS"

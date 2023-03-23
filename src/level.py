@@ -1,17 +1,18 @@
 import pygame
 from src.tile import Tile
 from src.quark import Quark
+from path import get_asset_path
 
 class Level:
     def __init__(self, screen, tile_size=32):
         self.screen = screen
         self.tile_size = tile_size
         self.tile_images = {
-            'E': pygame.image.load("assets/images/tiles/end.png"),
-            'W': pygame.image.load("assets/images/tiles/lime.png"),
-            'X': pygame.image.load("assets/images/tiles/light_green.png"),
-            'Y': pygame.image.load("assets/images/tiles/sky_blue.png"),
-            'Z': pygame.image.load("assets/images/tiles/dark_green.png"),
+            'E': pygame.image.load(get_asset_path("assets/images/tiles/end.png")),
+            'W': pygame.image.load(get_asset_path("assets/images/tiles/lime.png")),
+            'X': pygame.image.load(get_asset_path("assets/images/tiles/light_green.png")),
+            'Y': pygame.image.load(get_asset_path("assets/images/tiles/sky_blue.png")),
+            'Z': pygame.image.load(get_asset_path("assets/images/tiles/dark_green.png")),
         }
         self.walls = ['W', 'X', 'Y', 'Z']
         self.quarks = []
@@ -36,7 +37,7 @@ class Level:
 
                 try:
                     if tile_value in self.quark_interactions.keys():
-                        quark_image = f"assets/images/quarks/{tile_value}.png"
+                        quark_image = get_asset_path(f"assets/images/quarks/{tile_value}.png")
                         quark_interaction = self.quark_interactions[tile_value]
                         quark = Quark(x, y, self.tile_size, self.tile_size, quark_image, quark_interaction)
                         self.quarks.append(quark)

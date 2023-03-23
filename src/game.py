@@ -3,6 +3,7 @@ from src.player import Player
 from src.level import Level
 from src.levels import level1, level2, level3, level4
 from src.menu import Menu
+from path import get_asset_path
 
 class Game:
     def __init__(self, screen):
@@ -24,7 +25,7 @@ class Game:
         self.level = Level(self.screen)
         self.level.load_level(level_data)
         start_x, start_y = self.level.get_start_position()
-        self.player = Player(start_x, start_y, "assets/images/quarky.png")
+        self.player = Player(start_x, start_y, get_asset_path("assets/images/quarky.png"))
 
     def next_level(self):
         self.current_level += 1

@@ -1,5 +1,4 @@
 import traceback
-import os
 
 def main():
     import pygame
