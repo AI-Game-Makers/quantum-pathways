@@ -15,7 +15,7 @@ class Game:
 
         # Clock and timer
         self.clock = pygame.time.Clock()
-        self.level_time_limit = 20  # Time limit in seconds
+        self.level_time_limit = 120  # Time limit in seconds
         self.timer = 0
         self.fps = 60
         self.running = True
@@ -48,10 +48,14 @@ class Game:
 
     def main_loop(self):
         while self.running:
+            if self.player.time_dilation_active:
+                dt = self.clock.tick(self.fps / self.player.time_dilation_factor) / 1000.0
+            else:
+                dt = self.clock.tick(self.fps) / 1000.0
+
             self.handle_events()
-            self.update()
+            self.update(dt)
             self.draw()
-            self.clock.tick(self.fps)
 
     def handle_events(self):
         keys = pygame.key.get_pressed()
@@ -81,10 +85,12 @@ class Game:
             if keys[pygame.K_q]:
                 self.state = "menu"
 
-    def update(self):
-        dt = self.clock.tick(self.fps) / 1000.0
+    def update(self, dt):
         if self.state == "game":
-            self.timer += dt
+            if self.player.time_dilation_active:
+                self.timer += dt / self.player.time_dilation_factor
+            else:
+                self.timer += dt
             if self.timer >= self.level_time_limit:
                 self.state = "game_over"
                 self.timer = 0

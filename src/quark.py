@@ -1,4 +1,5 @@
 import pygame
+from enum import Enum
 
 class Quark:
     def __init__(self, x, y, width, height, image_path, interaction):
@@ -15,3 +16,10 @@ class Quark:
 
     def collides_with(self, rect):
         return self.rect.colliderect(rect)
+
+class QuarkType(Enum):
+    SUPERPOSITION = "superposition"
+    ENTANGLEMENT = "entanglement"
+    QUANTUM_TUNNELING = "quantum_tunneling"
+    TIME_DILATION = "time_dilation"
+    COLLECT = "collect"

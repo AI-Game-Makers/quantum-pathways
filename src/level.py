@@ -20,6 +20,7 @@ class Level:
             'R': 'superposition',
             'G': 'entanglement',
             'B': 'quantum_tunneling',
+            'T': 'time_dilation',
             'Q': 'collect'
         }
 

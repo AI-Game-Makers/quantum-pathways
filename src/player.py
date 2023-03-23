@@ -26,6 +26,9 @@ class Player:
         self.superposition_active = False
         self.entanglement_active = False
         self.quantum_tunneling_active = False
+        self.time_dilation_active = False
+        self.time_dilation_duration = 0
+        self.time_dilation_factor = 2
         self.collected_quarks = 0
 
     def collides_with_goal(self, goal):
@@ -72,11 +75,11 @@ class Player:
             self.entangled_pair.draw(screen)
 
     def draw(self, screen):
+        if self.entangled_pair:
+            self.draw_entangled_pair(screen)
         screen.blit(self.image, self.rect.topleft)
         if self.ghost:
             self.draw_ghost(screen)
-        if self.entangled_pair:
-            self.draw_entangled_pair(screen)
 
     def handle_input(self, events):
         keys = pygame.key.get_pressed()
@@ -120,9 +123,13 @@ class Player:
             self.entanglement_active = True
         elif quark.interaction == "quantum_tunneling":
             self.quantum_tunneling_active = True
+        elif quark.interaction == "time_dilation":
+            self.time_dilation_active = True
+            self.time_dilation_duration = 300  # 300 frames, for example
         elif quark.interaction == "collect":
             self.collected_quarks += 1
-            level.quarks.remove(quark)
+
+        level.quarks.remove(quark)
 
     def update(self, level):
         new_x, new_y = self.x, self.y
