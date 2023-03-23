@@ -3,6 +3,7 @@ from src.player import Player
 from src.level import Level
 from src.levels import level1, level2, level3, level4
 from src.menu import Menu
+from src.help_page import HelpPage
 from path import get_asset_path
 
 class Game:
@@ -22,6 +23,9 @@ class Game:
         # Menu
         self.menu = Menu(self.screen)
         self.state = "menu"
+
+        # Help Pages
+        self.help_page = HelpPage(self.screen)
 
         # Game Levels
         self.current_level = 0
@@ -62,12 +66,18 @@ class Game:
                     self.state = "game"
                 elif menu_state == "quit":
                     self.running = False
+                elif menu_state == "help":
+                    self.state = "help"
                 else:
                     self.state = "menu"
 
         if self.state == "game":
             self.player.handle_input(events)
 
+            if keys[pygame.K_q]:
+                self.state = "menu"
+
+        elif self.state == "help":
             if keys[pygame.K_q]:
                 self.state = "menu"
 
@@ -97,10 +107,12 @@ class Game:
             self.menu.draw()
         elif self.state == "game_over":
             self.draw_text("Game Over", (300, 250))
+        elif self.state == "help":
+            self.help_page.draw()
         pygame.display.flip()
 
     def draw_text(self, text, position, color=(255, 255, 255)):
-        text_surface = self.font.render(text, True, (255, 255, 255))
+        text_surface = self.font.render(text, True, color)
         self.screen.blit(text_surface, position)
 
     def draw_timer(self):

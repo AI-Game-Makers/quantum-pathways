@@ -16,3 +16,4 @@ build/
 *.exe
 .DS_Store
 assets/*/original/*
+error_log.txt
