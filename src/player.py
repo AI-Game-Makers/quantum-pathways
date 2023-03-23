@@ -142,6 +142,7 @@ class Player:
             self.y = new_y
             self.rect.y = new_y
 
-        quark_collision = self.collides_with_quark(level.quarks)
-        if quark_collision:
-            self.handle_quark_interaction(quark_collision, level)
+        if not self.quantum_tunneling_active:
+            quark_collision = self.collides_with_quark(level.quarks)
+            if quark_collision:
+                self.handle_quark_interaction(quark_collision, level)

@@ -10,16 +10,23 @@ class Game:
         self.screen = screen
         self.screen_width = screen.get_width()
         self.screen_height = screen.get_height()
-        self.timer = 0
-        self.running = True
-        self.fps = 60
+        self.font = pygame.font.Font(None, 36)
+
+        # Clock and timer
         self.clock = pygame.time.Clock()
-        self.all_levels = [level1, level2, level3, level4]
-        self.current_level = 0
-        self.load_level(self.all_levels[self.current_level])
+        self.level_time_limit = 20  # Time limit in seconds
+        self.timer = 0
+        self.fps = 60
+        self.running = True
+
+        # Menu
         self.menu = Menu(self.screen)
         self.state = "menu"
-        self.font = pygame.font.Font(None, 36)
+
+        # Game Levels
+        self.current_level = 0
+        self.all_levels = [level1, level2, level3, level4]
+        self.load_level(self.all_levels[self.current_level])
 
     def load_level(self, level_data):
         self.level = Level(self.screen)
@@ -31,9 +38,9 @@ class Game:
         self.current_level += 1
         if self.current_level < len(self.all_levels):
             self.load_level(self.all_levels[self.current_level])
+            self.timer = 0 
         else:
-            print("Congratulations! You've completed all levels!")
-            self.running = False
+            self.state = "game_over"
 
     def main_loop(self):
         while self.running:
@@ -65,11 +72,16 @@ class Game:
                 self.state = "menu"
 
     def update(self):
+        dt = self.clock.tick(self.fps) / 1000.0
         if self.state == "game":
-            self.timer += self.clock.tick(self.fps) / 1000.0
-            self.player.update(self.level)  # Pass the level to the update method.
-            if self.player.collides_with_goal(self.level.goal):
-                self.next_level()
+            self.timer += dt
+            if self.timer >= self.level_time_limit:
+                self.state = "game_over"
+                self.timer = 0
+            self.player.update(self.level)
+            if not self.player.quantum_tunneling_active:
+                if self.player.collides_with_goal(self.level.goal):
+                    self.next_level()
         elif self.state == "menu":
             self.menu.update()
 
@@ -80,23 +92,26 @@ class Game:
             self.player.draw(self.screen)  # draw player before the UI elements
             self.draw_level_number()
             self.draw_timer()
-            self.draw_score()
+            self.draw_text(f"Score: {self.get_score()}", (10, 10))
         elif self.state == "menu":
             self.menu.draw()
+        elif self.state == "game_over":
+            self.draw_text("Game Over", (300, 250))
         pygame.display.flip()
 
+    def draw_text(self, text, position, color=(255, 255, 255)):
+        text_surface = self.font.render(text, True, (255, 255, 255))
+        self.screen.blit(text_surface, position)
+
     def draw_timer(self):
-        timer_text = f"Time: {int(self.timer)}s"
-        timer_surface = self.font.render(timer_text, True, (255, 255, 255))
-        self.screen.blit(timer_surface, (10, 50))
+        time_remaining = int(self.level_time_limit - self.timer)
+        timer_color = (255, 0, 0) if time_remaining <= 10 else (255, 255, 255)
+        self.draw_text(f"Time: {time_remaining}", (200, 10), timer_color)
 
     def draw_level_number(self):
         level_text = f"Level: {self.current_level}"
         level_surface = self.font.render(level_text, True, (255, 255, 255))
         self.screen.blit(level_surface, (self.screen_width - 100, 10))
 
-    def draw_score(self):
-        font = pygame.font.Font(None, 36)
-        score_text = f"Score: {self.player.collected_quarks}"
-        score_surface = font.render(score_text, True, (255, 255, 255))
-        self.screen.blit(score_surface, (10, 10))
+    def get_score(self):
+        return self.player.collected_quarks
