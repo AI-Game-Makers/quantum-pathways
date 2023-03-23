@@ -26,13 +26,13 @@ class Ghost:
     def handle_input(self, keys):
         new_x, new_y = self.x, self.y
 
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_j]:
             self.vx -= self.acceleration
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_l]:
             self.vx += self.acceleration
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_i]:
             self.vy -= self.acceleration
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_k]:
             self.vy += self.acceleration
 
         self.vx *= self.friction

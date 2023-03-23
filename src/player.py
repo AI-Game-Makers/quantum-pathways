@@ -48,6 +48,8 @@ class Player:
         if self.ghost:
             self.rect.x = self.ghost.rect.x
             self.rect.y = self.ghost.rect.y
+            self.x = self.rect.x
+            self.y = self.rect.y
             self.remove_ghost()
 
     def draw_ghost(self, screen):
@@ -81,7 +83,6 @@ class Player:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if self.superposition_active and self.ghost:
-                    self.ghost.handle_input(keys)
                     if event.key == pygame.K_m:
                         self.merge_with_ghost()
                         self.superposition_active = False
@@ -107,6 +108,9 @@ class Player:
             self.vy -= self.acceleration
         if keys[pygame.K_DOWN]:
             self.vy += self.acceleration
+
+        if self.superposition_active and self.ghost:
+            self.ghost.handle_input(keys)
 
     def handle_quark_interaction(self, quark, level):
         if quark.interaction == "superposition":
@@ -146,3 +150,7 @@ class Player:
             quark_collision = self.collides_with_quark(level.quarks)
             if quark_collision:
                 self.handle_quark_interaction(quark_collision, level)
+        
+        if self.superposition_active:
+            self.ghost.rect.x += self.ghost.vx
+            self.ghost.rect.y += self.ghost.vy
