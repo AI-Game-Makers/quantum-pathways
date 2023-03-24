@@ -32,11 +32,18 @@ class Game:
         self.all_levels = [level1, level2, level3, level4]
         self.load_level(self.all_levels[self.current_level])
 
+        # Pause Menu
+        self.paused = False
+        self.pause_overlay = pygame.Surface((self.screen_width, self.screen_height))
+        self.pause_overlay.set_alpha(128)
+        self.pause_overlay.fill((0, 0, 0))
+
     def load_level(self, level_data):
         self.level = Level(self.screen)
         self.level.load_level(level_data)
         start_x, start_y = self.level.get_start_position()
         self.player = Player(start_x, start_y, get_asset_path("assets/images/quarky.png"))
+        self.timer = 0
 
     def next_level(self):
         self.current_level += 1
@@ -54,7 +61,8 @@ class Game:
                 dt = self.clock.tick(self.fps) / 1000.0
 
             self.handle_events()
-            self.update(dt)
+            if not self.paused:
+                self.update(dt)
             self.draw()
 
     def handle_events(self):
@@ -64,9 +72,15 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p and self.state == "game":
+                    self.toggle_pause()
+
             if self.state == "menu":
                 menu_state = self.menu.handle_input(keys)
                 if menu_state == "start":
+                    self.current_level = 0
+                    self.load_level(self.all_levels[self.current_level])
                     self.state = "game"
                 elif menu_state == "quit":
                     self.running = False
@@ -75,7 +89,7 @@ class Game:
                 else:
                     self.state = "menu"
 
-        if self.state == "game":
+        if self.state == "game" and not self.paused:
             self.player.handle_input(events)
 
             if keys[pygame.K_q]:
@@ -109,6 +123,9 @@ class Game:
             self.draw_level_number()
             self.draw_timer()
             self.draw_text(f"Score: {self.get_score()}", (10, 10))
+
+            if self.paused:
+                self.draw_pause_overlay(self.screen)
         elif self.state == "menu":
             self.menu.draw()
         elif self.state == "game_over":
@@ -117,9 +134,14 @@ class Game:
             self.help_page.draw()
         pygame.display.flip()
 
-    def draw_text(self, text, position, color=(255, 255, 255)):
+    def draw_text(self, text, position='centered', color=(255, 255, 255)):
         text_surface = self.font.render(text, True, color)
-        self.screen.blit(text_surface, position)
+        if position == 'centered':
+            text = self.font.render(text, True, (255, 255, 255))
+            text_rect = text.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
+            self.screen.blit(text, text_rect)
+        else:
+            self.screen.blit(text_surface, position)
 
     def draw_timer(self):
         time_remaining = int(self.level_time_limit - self.timer)
@@ -133,3 +155,11 @@ class Game:
 
     def get_score(self):
         return self.player.collected_quarks
+
+    def draw_pause_overlay(self, screen):
+        if self.paused:
+            screen.blit(self.pause_overlay, (0, 0))
+            self.draw_text("Game Paused")
+
+    def toggle_pause(self):
+        self.paused = not self.paused
