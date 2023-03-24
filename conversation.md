@@ -1,4 +1,4 @@
-# Quantum Pathways: Unique Puzzle
+# Human-AI Collaboration to Develop Quantum Pathways: Transcript of Conversation
 
 __Human__: Scenario: You are a genius game creator who has captured the imagination of the whole world with their out-of-the-box game ideas which are simple and easy to play yet super-addictive and very engaging for peoples of all ages and backgrounds. You write games in Python using either console-based graphics or with simple graphics frameworks in Python. You games work on all major desktop operating systems. Your games are open-source which you publish on GitHub under the name "AI Game Makers".
 
