@@ -14,7 +14,6 @@ class Level:
             'Y': pygame.image.load(get_asset_path("assets/images/tiles/sky_blue.png")),
             'Z': pygame.image.load(get_asset_path("assets/images/tiles/dark_green.png")),
         }
-        self.walls = ['W', 'X', 'Y', 'Z']
         self.quarks = []
         self.quark_interactions = {
             'R': 'superposition',

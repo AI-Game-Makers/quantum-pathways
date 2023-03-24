@@ -1,50 +1,97 @@
 # Quantum Pathways
 
-Quantum Pathways is a 2D puzzle-platformer game built with Pygame, where you control a character named Quarky who explores a quantum world. The game features unique mechanics inspired by quantum physics, such as superposition, entanglement, and quantum tunneling. Navigate through challenging levels, collect quarks, and solve puzzles to reach the goal area.
+Quantum Pathways is a unique [AI-developed](#credits) quantum physics-inspired puzzle-platformer where you control Quarky, a quirky character with quantum abilities. Navigate through various levels, collecting special quantum quarks and using Quarky's abilities to overcome obstacles and reach the goal.
+
+![Quantum Pathways Screenshot](screenshots/screenshot-1.png)
+
+## Features
+
+- Unique quantum physics-inspired gameplay mechanics
+- Collect quantum quarks granting abilities such as quantum superposition, entanglement, and tunneling
+- Time dilation feature to slow down time and make challenges more manageable
+- Simple menu system and user interface with a timer and scoring system to track your progress
+- A growing number of levels with increasing difficulty and complexity
+
+![Quantum Pathways Gameplay](screenshots/screenshot-2.png)
 
 ## Installation
 
-To play Quantum Pathways, follow these steps:
+Quantum Pathways is available for Windows, macOS, and Linux. Please visit the [releases page](releases) to download the latest version. Alternatively, you can also build the game from source.
 
-1. Ensure that you have Python 3.7 or later installed on your computer. You can download it from the official Python website: https://www.python.org/downloads/
+### Building from Source
 
-2. Install Pygame by running the following command in your terminal or command prompt:
+#### Set up the Development Environment
 
+1. Clone the repository or download the source code.
+
+```bash
+git clone https://github.com/AI-Game-Makers/quantum-pathways.git
+cd quantum-pathways
 ```
-pip install pygame
+
+2. Make sure you have Python 3.9 or later installed on your system. You can download Python from [python.org](https://www.python.org/downloads/). We recommend using a virtual environment to isolate the dependencies required by Quantum Pathways from other projects. You can create a virtual environment using the `venv` module that comes with Python. For example, the following commands create and activate a virtual environment named `venv`:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-3. Clone this repository or download the source code as a ZIP file and extract it to a directory of your choice.
-
-4. Open a terminal or command prompt, navigate to the directory containing the game's source code, and run the following command to start the game:
+3. Install the required dependencies:
+```bash
+pip install -r requirements.txt
 ```
+
+#### Run the Game
+
+Navigate to the `quantum-pathways` directory and run the following command to start the game:
+
+```bash
 python main.py
 ```
 
+If everything is set up correctly, you should see the game window open up and the main menu appear. The source code was tested using Python 3.9.6 on macOS 12.6.3 with `pygame==2.3.0`.
 
-## How to Play
+#### Build the Game
 
-Use the arrow keys to move Quarky. Interact with special quarks (R, G, and B) to activate quantum abilities:
+Quantum Pathways can be built into a standalone executable using [PyInstaller](https://www.pyinstaller.org/). To build the game, run the following command:
 
-- R Quarks: Superposition - Create a "ghost" of Quarky that can be controlled separately. Press "M" to merge with the ghost and return to a single character.
-- G Quarks: Entanglement - Create an entangled pair that can be used for teleportation. Press "E" to teleport to the entangled pair's location and remove the pair.
-- B Quarks: Quantum Tunneling - Activate the ability to pass through walls. Press "T" to deactivate quantum tunneling.
+```bash
+pyinstaller main.py --onefile --windowed --icon=assets/icon.ico
+```
 
-Collect the regular quarks (Q) to increase your score.
+The executable will be located in the `dist` directory.
 
-Reach the goal area (E) to complete the level.
+Alternatively, you can also build the game using the `install.sh` script. This script will create a virtual environment, install the required dependencies, and build the game.
 
-Press "Q" to return to the main menu.
+To run the script, execute the following command:
 
-## Known Issues and Limitations
+```bash
+./install.sh 1.0.0 platform
+```
 
-- The game currently features a limited number of levels. Additional levels will be added in future updates.
-- The game has been primarily tested on macOS. There may be platform-specific issues on other operating systems.
+The first argument is the version number of the game, and the second argument is the platform for which the game is being built. The platform argument can be either `windows`, `macos` or `linux`.
+
+The script will create an OS-specific executable with the name `quantum-pathways-v1.0.0-platform` in the `dist` directory. Please note that you can only build the game for the platform on which you are running the script.
+
+## Development
+
+Quantum Pathways is an open-source project, and we welcome contributions from the community. Feel free to fork the project, make changes, and submit pull requests. We're particularly interested in improvements to level design, gameplay mechanics, and graphics.
+
+### Roadmap
+
+We're actively working on improving Quantum Pathways and have plans to:
+
+- Add more levels with increasing difficulty and complexity
+- Implement enemies and NPC characters with AI-driven behaviors
+- Integrate additional quantum concepts such as decoherence into the gameplay
+- Enhance the graphics, sound effects, and overall immersion of the game
 
 ## License
 
-Quantum Pathways is released under the MIT License. See the LICENSE file for more information.
+This project is released under the [MIT License](LICENSE).
 
-## Acknowledgements
+## Credits
 
-Quantum Pathways was developed in collaboration with GPT-4, an AI language model by OpenAI.
+Quantum Pathways was initially developed by [OpenAI's ChatGPT](https://openai.com/product/gpt-4), a highly capable AI language model, with the assistance of [@saifkhichi96](https://github.com/saifkhichi96). The entire game concept and 99% of the source code in [v1.0.0-alpha](release/v1.0.0-alpha) were generated by GPT-4, and all the graphics were created by [OpenAI's DALL-E](https://openai.com/product/dall-e-2), an image-generation AI using prompts written by ChatGPT.
+
+The project showcases the power of AI-driven game design and the collaboration between humans and AI in creating unique and engaging experiences. To learn more about how the game was developed, [read this blog post](https://saifkhichi.com/blog/quantum-pathways/) or see the [transcript of the conversation between ChatGPT and Saif Khan](conversation.md) that led to the creation of the game.

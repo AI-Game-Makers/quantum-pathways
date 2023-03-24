@@ -15,7 +15,7 @@ class Game:
 
         # Clock and timer
         self.clock = pygame.time.Clock()
-        self.level_time_limit = 120  # Time limit in seconds
+        self.level_time_limit = 60  # Time limit in seconds
         self.timer = 0
         self.fps = 60
         self.running = True
@@ -124,7 +124,7 @@ class Game:
     def draw_timer(self):
         time_remaining = int(self.level_time_limit - self.timer)
         timer_color = (255, 0, 0) if time_remaining <= 10 else (255, 255, 255)
-        self.draw_text(f"Time: {time_remaining}", (200, 10), timer_color)
+        self.draw_text(f"Time: {time_remaining}", (10, 50), timer_color)
 
     def draw_level_number(self):
         level_text = f"Level: {self.current_level}"
