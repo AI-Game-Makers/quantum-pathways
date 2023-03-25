@@ -4,14 +4,13 @@ from src.level import Level
 from src.levels import level1, level2, level3, level4
 from src.menu import Menu
 from src.help_page import HelpPage
-from path import get_asset_path
+from src.utilities import draw_text
 
 class Game:
     def __init__(self, screen):
         self.screen = screen
         self.screen_width = screen.get_width()
         self.screen_height = screen.get_height()
-        self.font = pygame.font.Font(None, 36)
 
         # Clock and timer
         self.clock = pygame.time.Clock()
@@ -42,7 +41,7 @@ class Game:
         self.level = Level(self.screen)
         self.level.load_level(level_data)
         start_x, start_y = self.level.get_start_position()
-        self.player = Player(start_x, start_y, get_asset_path("assets/images/quarky.png"))
+        self.player = Player(start_x, start_y, "quarky.png")
         self.timer = 0
 
     def next_level(self):
@@ -102,6 +101,8 @@ class Game:
         elif self.state == "help":
             if keys[pygame.K_q]:
                 self.state = "menu"
+            else:
+                self.help_page.handle_events(events)
 
     def update(self, dt):
         if self.state == "game":
@@ -126,7 +127,8 @@ class Game:
             self.player.draw(self.screen)  # draw player before the UI elements
             self.draw_level_number()
             self.draw_timer()
-            self.draw_text(f"Score: {self.get_score()}", (10, 10))
+            draw_text(self.screen, f"Score: {self.get_score()}", (25, 2), font_size=24,
+                      font_variant="Bold", font_color=(255, 255, 255), align="left")
 
             if self.paused:
                 self.draw_pause_overlay(self.screen)
@@ -140,32 +142,15 @@ class Game:
             self.help_page.draw()
         pygame.display.flip()
 
-    def draw_text(self, text, position='centered', color=(255, 255, 255)):
-        text_surface = self.font.render(text, True, color)
-        if position == 'centered':
-            text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
-            self.screen.blit(text_surface, text_rect)
-        elif type(position) == tuple and len(position) == 2:
-            if type(position[0]) == int and type(position[1]) == int:
-                self.screen.blit(text_surface, position)
-            elif str(position[0]) == "centered" and type(position[1]) == int:
-                text_rect = text_surface.get_rect(center=(self.screen_width // 2, position[1]))
-                self.screen.blit(text_surface, text_rect)
-            elif type(position[0]) == int and str(position[1]) == 'centered':
-                text_rect = text_surface.get_rect(center=(position[0], self.screen_height // 2))
-                self.screen.blit(text_surface, text_rect)
-        else:
-            self.screen.blit(text_surface, position)
-
     def draw_timer(self):
         time_remaining = int(self.level_time_limit - self.timer)
-        timer_color = (255, 0, 0) if time_remaining <= 10 else (255, 255, 255)
-        self.draw_text(f"Time: {time_remaining}", (10, 50), timer_color)
+        draw_text(self.screen, f"Time: {time_remaining}", ('center', 16), font_size=24,
+                  font_variant="Bold", font_color=(255, 255, 255), align="center")
 
     def draw_level_number(self):
         level_text = f"Level: {self.current_level}"
-        level_surface = self.font.render(level_text, True, (255, 255, 255))
-        self.screen.blit(level_surface, (self.screen_width - 100, 10))
+        draw_text(self.screen, level_text, (self.screen_width - 25, 2), font_size=24,
+                  font_variant="Bold", font_color=(255, 255, 255), align="right")
 
     def get_score(self):
         return self.player.collected_quarks
@@ -173,24 +158,21 @@ class Game:
     def draw_pause_overlay(self, screen):
         if self.paused:
             screen.blit(self.pause_overlay, (0, 0))
-            self.draw_text("Game Paused")
+            draw_text(self.screen, "Game Paused", font_size=36, font_variant="Bold", font_color=(255, 255, 255))
 
     def toggle_pause(self):
         self.paused = not self.paused
 
     def game_won_screen(self):
-        self.draw_text(f"Congratulations! You won!", color=(0, 255, 0))
-        self.draw_text(f"Score: {self.get_score()}", ("centered", 100), color=(255, 255, 255))
-        self.draw_text("Press H to return to the main menu", 
-               ("centered", self.screen_height - 100), 
-               color=(255, 255, 255))
-
+        draw_text(self.screen, "Congratulations! You won!", ("center", 100), font_size=30, font_variant="Bold", font_color=(0, 255, 0))
+        draw_text(self.screen, f"Score: {self.get_score()}", ("center", 140), font_size=24, font_color=(255, 255, 255))
+        draw_text(self.screen, "Press H to return home", ("center", self.screen_height - 100), 
+                  font_size=14, font_color=(255, 255, 255))
 
     def game_lost_screen(self):
-        self.draw_text("Game Over! You lost!", color=(255, 0, 0))
-        self.draw_text(f"Score: {self.get_score()}", ("centered", 100), color=(255, 255, 255))
-        self.draw_text("Press H to return to the main menu", 
-               ("centered", self.screen_height - 100), 
-               color=(255, 255, 255))
+        draw_text(self.screen, "Game Over! You lost!", ("center", 100), font_size=30, font_variant="Bold", font_color=(255, 0, 0))
+        draw_text(self.screen, f"Score: {self.get_score()}", ("center", 140), font_size=24, font_color=(255, 255, 255))
+        draw_text(self.screen, "Press H to return home", ("center", self.screen_height - 100), 
+                  font_size=14, font_color=(255, 255, 255))
 
 

@@ -1,12 +1,12 @@
 import pygame
 from src.ghost import Ghost
 from src.entangled_pair import EntangledPair
-from path import get_asset_path
+from src.utilities import load_image
 
 class Player:
     def __init__(self, x, y, sprite_path):
         # Sprite
-        self.image = pygame.image.load(sprite_path)
+        self.image = load_image(sprite_path)
         self.rect = self.image.get_rect(topleft=(x, y))
 
         # Position
@@ -42,7 +42,7 @@ class Player:
 
     def create_ghost(self):
         if not self.ghost:
-            self.ghost = Ghost(self.rect.x, self.rect.y, get_asset_path("assets/images/ghost.png"))
+            self.ghost = Ghost(self.rect.x, self.rect.y)
 
     def remove_ghost(self):
         self.ghost = None
@@ -60,7 +60,7 @@ class Player:
             self.ghost.draw(screen)
 
     def create_entangled_pair(self):
-        self.entangled_pair = EntangledPair(self.x, self.y, get_asset_path("assets/images/entangled_pair.png"))
+        self.entangled_pair = EntangledPair(self.x, self.y)
 
     def teleport_to_entangled_pair(self):
         self.x, self.y = self.entangled_pair.x, self.entangled_pair.y

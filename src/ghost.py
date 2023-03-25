@@ -1,9 +1,10 @@
 import pygame
+from src.utilities import load_image
 
 class Ghost:
-    def __init__(self, x, y, image_path):
+    def __init__(self, x, y, image_path='ghost.png'):
         # Sprite
-        self.image = pygame.image.load(image_path)
+        self.image = load_image(image_path)
         self.rect = self.image.get_rect(topleft=(x, y))
 
         # Position

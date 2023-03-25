@@ -1,24 +1,33 @@
 import pygame
+from src.utilities import draw_button, draw_text, vertical_gradient, load_image
 
 class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.options = ["Start", "Help", "Quit"]
         self.selected_option = 0
-        self.font = pygame.font.Font(None, 36)
 
     def draw(self):
+        vertical_gradient(self.screen, (0, 0, 50), (128, 0, 128))  # Dark blue to purple gradient
+        draw_text(self.screen, "Quantum Pathways", position=('center', 100), 
+                  font_color=(255, 255, 255), font_size=48, font_variant="BoldItalic")
         y = 250
         for i, item in enumerate(self.options):
+            bg_color = (80, 80, 80) # Gray
+            border_color = (255, 255, 255) # White
+            text_color = (255, 255, 255) # White
+            font_variant = "Regular"
             if i == self.selected_option:
-                color = (255, 255, 0)  # Yellow color for the selected menu item
-            else:
-                color = (255, 255, 255)  # White color for the non-selected menu items
+                bg_color = (255, 255, 255) # White
+                border_color = (80, 80, 80) # Gray
+                text_color = (0, 0, 50) # Dark blue
+                font_variant = "Bold"
 
-            text = self.font.render(item, True, color)
-            text_rect = text.get_rect(center=(self.screen.get_width() // 2, y))
-            self.screen.blit(text, text_rect)
+            draw_button(self.screen, item, ('center', y), font_color=text_color, padding=(20, 5),
+                        bg_color=bg_color, border_color=border_color, font_variant=font_variant)
             y += 50
+        draw_text(self.screen, "Developed by Aria, a GPT-4 AI at AI Game Makers", position=('center', 580), 
+                  font_color=(255, 255, 255), font_size=12, font_variant="Italic")
 
     def update(self):
         pass
