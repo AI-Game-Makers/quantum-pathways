@@ -1,0 +1,13 @@
+title: AI Game Makers
+email: ai-game-makers@gmail.com
+description: >-
+  AI Game Makers is an organization dedicated to developing innovative and engaging games with the help of AI. Our flagship project is Quantum Pathways, a game built around the fascinating world of quantum mechanics.
+baseurl: "/quantum-pathways"
+url: "https://ai-game-makers.github.io"
+
+remote_theme: andrewbanchich/forty-jekyll-theme
+
+exclude: # "src" folder should be excluded from the build
+- src
+- LICENSE.md
+- CONTRIBUTING.md
