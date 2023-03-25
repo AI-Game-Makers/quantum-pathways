@@ -15,7 +15,7 @@ class Game:
 
         # Clock and timer
         self.clock = pygame.time.Clock()
-        self.level_time_limit = 60  # Time limit in seconds
+        self.level_time_limit = 120  # Time limit in seconds
         self.timer = 0
         self.fps = 60
         self.running = True
@@ -51,7 +51,7 @@ class Game:
             self.load_level(self.all_levels[self.current_level])
             self.timer = 0 
         else:
-            self.state = "game_over"
+            self.state = "game_won"
 
     def main_loop(self):
         while self.running:
@@ -73,8 +73,12 @@ class Game:
                 self.running = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p and self.state == "game":
-                    self.toggle_pause()
+                if self.state == "game":
+                    if event.key == pygame.K_p:
+                        self.toggle_pause()
+                elif self.state in ["game_won", "game_lost"]:
+                    if event.key == pygame.K_h:
+                        self.state = "menu"
 
             if self.state == "menu":
                 menu_state = self.menu.handle_input(keys)
@@ -106,7 +110,7 @@ class Game:
             else:
                 self.timer += dt
             if self.timer >= self.level_time_limit:
-                self.state = "game_over"
+                self.state = "game_lost"
                 self.timer = 0
             self.player.update(self.level)
             if not self.player.quantum_tunneling_active:
@@ -128,8 +132,10 @@ class Game:
                 self.draw_pause_overlay(self.screen)
         elif self.state == "menu":
             self.menu.draw()
-        elif self.state == "game_over":
-            self.draw_text("Game Over", (300, 250))
+        elif self.state == "game_won":
+            self.game_won_screen()
+        elif self.state == "game_lost":
+            self.game_lost_screen()
         elif self.state == "help":
             self.help_page.draw()
         pygame.display.flip()
@@ -137,9 +143,17 @@ class Game:
     def draw_text(self, text, position='centered', color=(255, 255, 255)):
         text_surface = self.font.render(text, True, color)
         if position == 'centered':
-            text = self.font.render(text, True, (255, 255, 255))
-            text_rect = text.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
-            self.screen.blit(text, text_rect)
+            text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
+            self.screen.blit(text_surface, text_rect)
+        elif type(position) == tuple and len(position) == 2:
+            if type(position[0]) == int and type(position[1]) == int:
+                self.screen.blit(text_surface, position)
+            elif str(position[0]) == "centered" and type(position[1]) == int:
+                text_rect = text_surface.get_rect(center=(self.screen_width // 2, position[1]))
+                self.screen.blit(text_surface, text_rect)
+            elif type(position[0]) == int and str(position[1]) == 'centered':
+                text_rect = text_surface.get_rect(center=(position[0], self.screen_height // 2))
+                self.screen.blit(text_surface, text_rect)
         else:
             self.screen.blit(text_surface, position)
 
@@ -163,3 +177,20 @@ class Game:
 
     def toggle_pause(self):
         self.paused = not self.paused
+
+    def game_won_screen(self):
+        self.draw_text(f"Congratulations! You won!", color=(0, 255, 0))
+        self.draw_text(f"Score: {self.get_score()}", ("centered", 100), color=(255, 255, 255))
+        self.draw_text("Press H to return to the main menu", 
+               ("centered", self.screen_height - 100), 
+               color=(255, 255, 255))
+
+
+    def game_lost_screen(self):
+        self.draw_text("Game Over! You lost!", color=(255, 0, 0))
+        self.draw_text(f"Score: {self.get_score()}", ("centered", 100), color=(255, 255, 255))
+        self.draw_text("Press H to return to the main menu", 
+               ("centered", self.screen_height - 100), 
+               color=(255, 255, 255))
+
+
