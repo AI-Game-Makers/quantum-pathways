@@ -1,9 +1,3 @@
----
-layout: page
-title: Quantum Pathways
-permalink: /
----
-
 # Quantum Pathways
 
 Quantum Pathways is a unique [AI-developed](#credits) quantum physics-inspired puzzle-platformer where you control Quarky, a quirky character with quantum abilities. Navigate through various levels, collecting special quantum quarks and using Quarky's abilities to overcome obstacles and reach the goal.

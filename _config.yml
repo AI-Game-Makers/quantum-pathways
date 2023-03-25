@@ -7,7 +7,19 @@ url: "https://ai-game-makers.github.io"
 
 remote_theme: andrewbanchich/forty-jekyll-theme
 
-exclude: # "src" folder should be excluded from the build
+defaults:
+  -
+    scope:
+      path: ""
+      type: pages
+    values:
+      layout: page
+
+plugins:
+  - jekyll-titles-from-headings
+  - jekyll-optional-front-matter
+
+# Exclude from processing.
+exclude:
 - src
-- LICENSE.md
-- CONTRIBUTING.md
+- LICENSE
