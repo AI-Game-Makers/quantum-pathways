@@ -1,6 +1,6 @@
 import pygame
 from enum import Enum
-from src.utilities import load_image
+from src.ui import Image
 
 class Quark:
     def __init__(self, x, y, width, height, image_path, interaction):
@@ -8,15 +8,16 @@ class Quark:
         self.y = y
         self.width = width
         self.height = height
-        self.image = load_image(image_path)
-        self.rect = pygame.Rect(x, y, width, height)
+        self.image = Image(image_path, (width, height))
+        self.bbox = pygame.Rect(x, y, width, height)
         self.interaction = interaction
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        self.image.position = (self.x, self.y)
+        self.image.draw(screen)
 
     def collides_with(self, rect):
-        return self.rect.colliderect(rect)
+        return self.bbox.colliderect(rect)
 
 class QuarkType(Enum):
     SUPERPOSITION = "superposition"

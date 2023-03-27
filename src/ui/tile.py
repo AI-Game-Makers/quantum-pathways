@@ -7,7 +7,8 @@ class Tile(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, width, height)
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+        self.image.position = self.rect.topleft
+        self.image.draw(screen)
 
     def collides_with(self, rect):
         return self.rect.colliderect(rect)

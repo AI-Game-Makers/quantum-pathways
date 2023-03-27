@@ -1,19 +1,11 @@
-import pygame
-from src.tile import Tile
-from src.quark import Quark
-from src.utilities import load_image
+from src.objects.quark import Quark
+from src.ui import Image, Tile
 
 class Level:
-    def __init__(self, screen, tile_size=32):
+    def __init__(self, screen, level_data, tile_size=32):
         self.screen = screen
         self.tile_size = tile_size
-        self.tile_images = {
-            'E': load_image("tiles/end.png"),
-            'W': load_image("tiles/lime.png"),
-            'X': load_image("tiles/light_green.png"),
-            'Y': load_image("tiles/sky_blue.png"),
-            'Z': load_image("tiles/dark_green.png"),
-        }
+        self.tile_images = {tile_type: Image(f"tiles/{tile_type}.png", (tile_size, tile_size)) for tile_type in ["E", "W", "X", "Y", "Z"]}
         self.quarks = []
         self.quark_interactions = {
             'R': 'superposition',
@@ -22,6 +14,8 @@ class Level:
             'T': 'time_dilation',
             'Q': 'collect'
         }
+        self.load_level(level_data)
+        self.time_limit = 120
 
     def load_level(self, level_data):
         self.level_data = level_data
@@ -44,8 +38,7 @@ class Level:
                         tile = None  # Set tile to None when it's a quark.
                     else:
                         tile_image = self.tile_images[tile_value]
-                        if tile_image is not None:
-                            tile = Tile(x, y, self.tile_size, self.tile_size, tile_image)
+                        tile = Tile(x, y, self.tile_size, self.tile_size, tile_image)
 
                     if tile_value == "E":
                         self.goal = tile
@@ -67,10 +60,7 @@ class Level:
 
         self.draw_quarks()
 
-    def collides_with_wall(self, rect, quantum_tunneling_active):
-        if quantum_tunneling_active:
-            return False
-
+    def collides_with_wall(self, rect):
         for row in self.tiles:
             for tile in row:
                 if tile is not None and tile.collides_with(rect) and tile != self.goal:

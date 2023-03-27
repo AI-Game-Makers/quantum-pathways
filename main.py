@@ -2,16 +2,10 @@ import traceback
 
 def main():
     import pygame
-    from src.game import Game
-    pygame.init()
+    from src.game_manager import GameManager
 
-    screen_width = 800
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Quantum Pathways")
-
-    game = Game(screen)
-    game.main_loop()
+    gm = GameManager()
+    gm.run()
 
     pygame.quit()
 
@@ -25,5 +19,4 @@ if __name__ == "__main__":
             f.write(str(e))
             f.write("\n\nTraceback information:\n")
             traceback.print_exc(file=f)
-        print(f"An error occurred. See {error_file} for details.")
-        input("Press any key to exit...")
+            raise e
