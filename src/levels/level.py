@@ -27,13 +27,15 @@ class Level:
             tile_row = []
             for j, tile_value in enumerate(row):
                 x = j * self.tile_size
-                y = i * self.tile_size
+                y = i * self.tile_size + 24  # Add 24 to account for the top bar.
 
                 try:
                     if tile_value in self.quark_interactions.keys():
                         quark_image = f"quarks/{tile_value}.png"
                         quark_interaction = self.quark_interactions[tile_value]
-                        quark = Quark(x, y, self.tile_size, self.tile_size, quark_image, quark_interaction)
+                        size = self.tile_size * 2 // 3
+                        offset = (self.tile_size - size) // 2
+                        quark = Quark(x + offset, y + offset, size, size, quark_image, quark_interaction)
                         self.quarks.append(quark)
                         tile = None  # Set tile to None when it's a quark.
                     else:

@@ -56,14 +56,16 @@ class Game(Scene):
 class GameUI:
     def __init__(self, game):
         self.game = game
-        self.score_label = Label("Score: 0", position=(25, 2), font_size=24, font_color=COLORS['white'],
-                                 font_variant="Bold", align="left")
-        self.timer_label = Label("Time: 0", position=("center", 16), font_size=24, font_color=COLORS['white'],
-                                 font_variant="Bold", align="center")
-        self.level_label = Label("Level: 0", position=(-25, 2), font_size=24, font_color=COLORS['white'],
-                                 font_variant="Bold", align="right")
+        self.top_bar = pygame.Surface((self.game.manager.width, 24))
+        self.score_label = Label("Score: 0", position=(5, 0), font_size=18, font_color=COLORS['white'],
+                                 font_variant="Regular", align="left")
+        self.timer_label = Label("Time: 0", position=("center", 12), font_size=18, font_color=COLORS['white'],
+                                 font_variant="Regular", align="center")
+        self.level_label = Label("Level: 0", position=(-5, 0), font_size=18, font_color=COLORS['white'],
+                                 font_variant="Regular", align="right")
 
     def draw(self, screen):
+        screen.blit(self.top_bar, (0, 0))
         self.draw_level_number(screen)
         self.draw_timer(screen)
         self.draw_score(screen)

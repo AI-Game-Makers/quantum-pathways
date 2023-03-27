@@ -49,7 +49,7 @@ class Character:
 
     def clamp_position(self, screen):
         self.x = max(0, min(screen.get_width() - self.bbox.width, self.x))
-        self.y = max(0, min(screen.get_height() - self.bbox.height, self.y))
+        self.y = max(24, min(screen.get_height() - self.bbox.height, self.y))
         self.bbox.x, self.bbox.y = self.x, self.y
 
     def update(self, dt):
